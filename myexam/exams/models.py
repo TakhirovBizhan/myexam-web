@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Exam(models.Model):
+class Exam(models.Model): # забыл добавить инициалы
     title = models.CharField(max_length=255)  
     created_at = models.DateTimeField(auto_now_add=True) 
     exam_date = models.DateField()  

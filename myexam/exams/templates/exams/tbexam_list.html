@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Публичные экзамены</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .exam {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+        .exam img {
+            max-width: 300px;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .field-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .no-data {
+            font-style: italic;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <h1>Опубликованные экзамены</h1>
+    <h1>Тахиров Бижан 231-323</h1>
+    {% if exams %}
+        {% for exam in exams %}
+            <div class="exam">
+                <p>
+                    <span class="field-label">Название экзамена:</span>
+                    {{ exam.title }}
+                </p>
+                <p>
+                    <span class="field-label">Дата создания записи:</span>
+                    {{ exam.created_at|date:"Y-m-d H:i" }}
+                </p>
+                <p>
+                    <span class="field-label">Дата проведения экзамена:</span>
+                    {{ exam.exam_date|date:"Y-m-d" }}
+                </p>
+                <p>
+                    <span class="field-label">Изображение задания:</span>
+                </p>
+                {% if exam.image %}
+                    <img src="{{ exam.image.url }}" alt="Изображение для {{ exam.title }}" />
+                {% else %}
+                    <p class="no-data"><em>Изображение не загружено.</em></p>
+                {% endif %}
+
+                <p>
+                    <span class="field-label">Пользователи, сдающие экзамен:</span>
+                    {% for user in exam.users.all %}
+                        {% if user.get_full_name %}
+                            {{ user.get_full_name }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        <em>Нет назначенных пользователей.</em>
+                    {% endfor %}
+                </p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-data">Пока нет опубликованных экзаменов.</p>
+    {% endif %}
+</body>
+</html>
